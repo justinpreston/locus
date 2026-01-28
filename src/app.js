@@ -19,6 +19,34 @@
   const STORAGE_KEY = 'locus_items';
   const STATUSES = ['backlog', 'in_progress', 'blocked', 'done'];
 
+  // Embedded data for file:// protocol fallback
+  const EMBEDDED_DATA = {
+    "rooms": {
+      "vault": { "name": "The Vault", "description": "Trading, finance, and investments", "icon": "🏦", "color": "#D4AF37" },
+      "hearth": { "name": "The Hearth", "description": "Family, home, and personal", "icon": "🏠", "color": "#E07A5F" },
+      "workshop": { "name": "The Workshop", "description": "Tech projects and tools", "icon": "🔧", "color": "#81B29A" },
+      "garden": { "name": "The Garden", "description": "Ideas and someday/maybe", "icon": "🌱", "color": "#9B72AA" },
+      "archive": { "name": "The Archive", "description": "Completed and reference", "icon": "📜", "color": "#6B7280" }
+    },
+    "items": [
+      { "id": "vault-001", "title": "Track DLA Strategic Materials announcement", "room": "vault", "status": "in_progress", "priority": "high", "due": "2026-02-11", "source": "memory/2025-01-27.md", "notes": "Major catalyst for critical minerals plays (UUUU, UAMY, MP)", "tags": ["catalyst", "trading", "meridian"], "created": "2026-01-27" },
+      { "id": "vault-002", "title": "Track DOE NOFO awards", "room": "vault", "status": "in_progress", "priority": "high", "due": "2026-02-23", "source": "memory/2025-01-27.md", "notes": "DOE funding announcements for critical minerals", "tags": ["catalyst", "trading", "meridian"], "created": "2026-01-27" },
+      { "id": "vault-003", "title": "Automate Fidelity position scraping", "room": "vault", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2025-01-27.md", "notes": "Use browser automation to scrape positions from Fidelity tab.", "tags": ["automation", "portfolio"], "created": "2026-01-27" },
+      { "id": "vault-004", "title": "Set up Reddit Radar daily cron", "room": "vault", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-27.md", "notes": "Daily digest of Reddit mentions. ApeWisdom.io + QuiverQuant.", "tags": ["automation", "reddit"], "created": "2026-01-27" },
+      { "id": "workshop-001", "title": "Build Locus dashboard", "room": "workshop", "status": "done", "priority": "high", "due": null, "source": "memory/2025-01-27.md", "notes": "Self-hosted project board with memory palace metaphor. ✅ Complete!", "tags": ["project", "dashboard"], "created": "2026-01-27" },
+      { "id": "workshop-002", "title": "VPS migration & off-site backup", "room": "workshop", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2026-01-27.md", "notes": "Current backup is local only. Need cloud/off-site push.", "tags": ["infrastructure", "backup"], "created": "2026-01-27" },
+      { "id": "workshop-003", "title": "Moltbot migration", "room": "workshop", "status": "backlog", "priority": "low", "due": null, "source": "memory/2025-01-27.md", "notes": "Clawdbot → Moltbot rebrand. Wait for official migration path.", "tags": ["migration"], "created": "2026-01-27" },
+      { "id": "workshop-004", "title": "Investigate awesome-moltbot-skills repo", "room": "workshop", "status": "backlog", "priority": "low", "due": null, "source": "memory/2025-01-27.md", "notes": "https://github.com/VoltAgent/awesome-moltbot-skills", "tags": ["research", "skills"], "created": "2026-01-27" },
+      { "id": "workshop-005", "title": "Claude Connect setup", "room": "workshop", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-26.md", "notes": "Claude CLI not installed, using API key instead", "tags": ["setup"], "created": "2026-01-26" },
+      { "id": "workshop-006", "title": "Discord bot - fix message receiving", "room": "workshop", "status": "in_progress", "priority": "medium", "due": null, "source": "memory/2026-01-27.md", "notes": "Bot can send but not receive. Reset in progress.", "tags": ["discord", "bot"], "created": "2026-01-27" },
+      { "id": "hearth-001", "title": "Dawson therapy follow-up", "room": "hearth", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2025-01-27.md", "notes": "Shamieka emailed therapist about PTSD signs to watch for.", "tags": ["family", "dawson"], "created": "2026-01-27" },
+      { "id": "hearth-002", "title": "Citizens Bank payment issue", "room": "hearth", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2026-01-26.md", "notes": "Shamieka forwarded failed payment, needs JP's help", "tags": ["family", "finance"], "created": "2026-01-26" },
+      { "id": "hearth-003", "title": "Kids' missing work follow-up", "room": "hearth", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-26.md", "notes": "Science 8 notification for one of the kids", "tags": ["family", "school"], "created": "2026-01-26" },
+      { "id": "garden-001", "title": "Notion integration experiment", "room": "garden", "status": "backlog", "priority": "low", "due": null, "source": "memory/2025-01-27.md", "notes": "Parallel experiment alongside Locus.", "tags": ["idea", "integration"], "created": "2026-01-27" },
+      { "id": "garden-002", "title": "Google Calendar re-auth", "room": "garden", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-26.md", "notes": "Needs calendar scope added to OAuth", "tags": ["setup", "google"], "created": "2026-01-26" }
+    ]
+  };
+
   // ========================================
   // DOM References
   // ========================================
@@ -46,11 +74,22 @@
       // Try to load from localStorage first (for persisted changes)
       const stored = localStorage.getItem(STORAGE_KEY);
       
-      // Always fetch the base data for rooms
-      const response = await fetch('../data/projects.json');
-      if (!response.ok) throw new Error('Failed to load projects.json');
+      let data;
       
-      const data = await response.json();
+      // Try fetch first (works with http server)
+      try {
+        const response = await fetch('../data/projects.json');
+        if (response.ok) {
+          data = await response.json();
+        } else {
+          throw new Error('Fetch failed');
+        }
+      } catch (fetchError) {
+        // Fall back to embedded data (for file:// protocol)
+        console.log('Using embedded data (file:// protocol detected)');
+        data = EMBEDDED_DATA;
+      }
+      
       state.rooms = data.rooms;
       
       // Use stored items if available, otherwise use file data
