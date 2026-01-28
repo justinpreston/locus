@@ -8,6 +8,41 @@
   'use strict';
 
   // ========================================
+  // Theme Management
+  // ========================================
+  
+  function initTheme() {
+    const saved = localStorage.getItem('locus-theme');
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else if (saved === 'light') {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+    // else: let system preference (CSS media query) handle it
+  }
+  
+  function toggleTheme() {
+    const root = document.documentElement;
+    const isDark = root.classList.contains('dark') || 
+      (!root.classList.contains('light') && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    
+    if (isDark) {
+      root.classList.remove('dark');
+      root.classList.add('light');
+      localStorage.setItem('locus-theme', 'light');
+    } else {
+      root.classList.remove('light');
+      root.classList.add('dark');
+      localStorage.setItem('locus-theme', 'dark');
+    }
+  }
+  
+  // Initialize theme immediately
+  initTheme();
+
+  // ========================================
   // Config
   // ========================================
   
@@ -407,6 +442,12 @@
         closeModal();
       }
     });
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', toggleTheme);
+    }
   }
 
   // ========================================

@@ -8,45 +8,45 @@
    ======================================== */
 
 :root {
-  /* Background layers */
-  --background: hsl(240 10% 3.9%);
-  --background-secondary: hsl(240 10% 5%);
-  --card: hsl(240 10% 6%);
-  --card-hover: hsl(240 10% 8%);
-  --popover: hsl(240 10% 6%);
+  /* Light mode default */
+  --background: hsl(0 0% 100%);
+  --background-secondary: hsl(0 0% 98%);
+  --card: hsl(0 0% 100%);
+  --card-hover: hsl(0 0% 96%);
+  --popover: hsl(0 0% 100%);
   
   /* Borders & Dividers */
-  --border: hsl(240 3.7% 15.9%);
-  --border-subtle: hsl(240 3.7% 12%);
-  --ring: hsl(240 4.9% 83.9%);
+  --border: hsl(240 5.9% 90%);
+  --border-subtle: hsl(240 5.9% 94%);
+  --ring: hsl(240 5% 64.9%);
   
   /* Text */
-  --foreground: hsl(0 0% 98%);
-  --foreground-muted: hsl(240 5% 64.9%);
-  --foreground-subtle: hsl(240 3.7% 46%);
+  --foreground: hsl(240 10% 3.9%);
+  --foreground-muted: hsl(240 3.8% 46.1%);
+  --foreground-subtle: hsl(240 4.8% 65%);
   
   /* Muted surfaces */
-  --muted: hsl(240 3.7% 15.9%);
-  --muted-foreground: hsl(240 5% 64.9%);
+  --muted: hsl(240 4.8% 95.9%);
+  --muted-foreground: hsl(240 3.8% 46.1%);
   
   /* Accent (refined gold) */
-  --accent: hsl(45 74% 52%);
+  --accent: hsl(45 74% 48%);
   --accent-muted: hsl(45 50% 40%);
-  --accent-foreground: hsl(240 10% 3.9%);
-  --accent-surface: hsla(45 74% 52% / 0.1);
-  --accent-border: hsla(45 74% 52% / 0.3);
+  --accent-foreground: hsl(0 0% 100%);
+  --accent-surface: hsla(45 74% 48% / 0.1);
+  --accent-border: hsla(45 74% 48% / 0.3);
   
-  /* Room Colors (slightly muted for shadcn feel) */
-  --room-vault: hsl(45 74% 52%);
-  --room-hearth: hsl(14 64% 55%);
-  --room-workshop: hsl(150 30% 50%);
-  --room-garden: hsl(280 30% 55%);
+  /* Room Colors */
+  --room-vault: hsl(45 74% 48%);
+  --room-hearth: hsl(14 64% 50%);
+  --room-workshop: hsl(150 35% 45%);
+  --room-garden: hsl(280 35% 50%);
   --room-archive: hsl(220 9% 46%);
   
   /* Status/Priority */
-  --destructive: hsl(0 62% 55%);
+  --destructive: hsl(0 62% 50%);
   --warning: hsl(38 92% 50%);
-  --success: hsl(142 71% 45%);
+  --success: hsl(142 71% 40%);
   
   /* Spacing scale */
   --space-1: 0.25rem;
@@ -71,11 +71,85 @@
   --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
   
-  /* Shadows (very subtle) */
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Dark mode */
+:root.dark {
+  --background: hsl(240 10% 3.9%);
+  --background-secondary: hsl(240 10% 5%);
+  --card: hsl(240 10% 6%);
+  --card-hover: hsl(240 10% 8%);
+  --popover: hsl(240 10% 6%);
+  
+  --border: hsl(240 3.7% 15.9%);
+  --border-subtle: hsl(240 3.7% 12%);
+  --ring: hsl(240 4.9% 83.9%);
+  
+  --foreground: hsl(0 0% 98%);
+  --foreground-muted: hsl(240 5% 64.9%);
+  --foreground-subtle: hsl(240 3.7% 46%);
+  
+  --muted: hsl(240 3.7% 15.9%);
+  --muted-foreground: hsl(240 5% 64.9%);
+  
+  --accent: hsl(45 74% 52%);
+  --accent-muted: hsl(45 50% 40%);
+  --accent-foreground: hsl(240 10% 3.9%);
+  --accent-surface: hsla(45 74% 52% / 0.1);
+  --accent-border: hsla(45 74% 52% / 0.3);
+  
+  --room-vault: hsl(45 74% 52%);
+  --room-hearth: hsl(14 64% 55%);
+  --room-workshop: hsl(150 30% 50%);
+  --room-garden: hsl(280 30% 55%);
+  --room-archive: hsl(220 9% 46%);
+  
+  --destructive: hsl(0 62% 55%);
+  --warning: hsl(38 92% 50%);
+  --success: hsl(142 71% 45%);
+}
+
+/* System preference detection */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --background: hsl(240 10% 3.9%);
+    --background-secondary: hsl(240 10% 5%);
+    --card: hsl(240 10% 6%);
+    --card-hover: hsl(240 10% 8%);
+    --popover: hsl(240 10% 6%);
+    
+    --border: hsl(240 3.7% 15.9%);
+    --border-subtle: hsl(240 3.7% 12%);
+    --ring: hsl(240 4.9% 83.9%);
+    
+    --foreground: hsl(0 0% 98%);
+    --foreground-muted: hsl(240 5% 64.9%);
+    --foreground-subtle: hsl(240 3.7% 46%);
+    
+    --muted: hsl(240 3.7% 15.9%);
+    --muted-foreground: hsl(240 5% 64.9%);
+    
+    --accent: hsl(45 74% 52%);
+    --accent-muted: hsl(45 50% 40%);
+    --accent-foreground: hsl(240 10% 3.9%);
+    --accent-surface: hsla(45 74% 52% / 0.1);
+    --accent-border: hsla(45 74% 52% / 0.3);
+    
+    --room-vault: hsl(45 74% 52%);
+    --room-hearth: hsl(14 64% 55%);
+    --room-workshop: hsl(150 30% 50%);
+    --room-garden: hsl(280 30% 55%);
+    --room-archive: hsl(220 9% 46%);
+    
+    --destructive: hsl(0 62% 55%);
+    --warning: hsl(38 92% 50%);
+    --success: hsl(142 71% 45%);
+  }
 }
 
 /* ========================================
@@ -838,4 +912,78 @@ body {
   text-align: center;
   color: var(--foreground-subtle);
   font-size: 0.8125rem;
+}
+
+/* ========================================
+   Theme Toggle Button
+   ======================================== */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--foreground-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.theme-toggle:hover {
+  background: var(--card-hover);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+
+/* Show/hide icons based on theme */
+.theme-toggle .sun-icon {
+  display: none;
+}
+
+.theme-toggle .moon-icon {
+  display: block;
+}
+
+:root.dark .theme-toggle .sun-icon {
+  display: block;
+}
+
+:root.dark .theme-toggle .moon-icon {
+  display: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) .theme-toggle .sun-icon {
+    display: block;
+  }
+  :root:not(.light) .theme-toggle .moon-icon {
+    display: none;
+  }
+}
+
+/* Header layout adjustment */
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  position: relative;
+}
+
+@media (min-width: 768px) {
+  .header-content {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .theme-toggle {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
 }
