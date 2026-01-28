@@ -78,7 +78,7 @@
       
       // Try fetch first (works with http server)
       try {
-        const response = await fetch('../data/projects.json');
+        const response = await fetch('./data/projects.json');
         if (response.ok) {
           data = await response.json();
         } else {
