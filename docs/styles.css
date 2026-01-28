@@ -987,3 +987,117 @@ body {
     transform: translateY(-50%);
   }
 }
+
+/* ========================================
+   Auth UI Styles
+   ======================================== */
+
+.auth-container {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.login-btn:hover {
+  background: var(--card-hover);
+  border-color: var(--accent-border);
+}
+
+.login-btn svg {
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  border: 2px solid var(--border);
+}
+
+.user-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--foreground-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.logout-btn:hover {
+  background: var(--destructive);
+  border-color: var(--destructive);
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .user-name {
+    display: none;
+  }
+  
+  .auth-container {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+  }
+}
+
+/* Drag-and-drop visual feedback */
+.card.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+}
+
+.column.drag-over .cards {
+  background: var(--accent-surface);
+  border-radius: var(--radius-md);
+}
+
+.drop-indicator {
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px;
+  margin: var(--space-2) 0;
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}

@@ -43,6 +43,157 @@
   initTheme();
 
   // ========================================
+  // GitHub OAuth Config
+  // ========================================
+  
+  const GITHUB_CLIENT_ID = 'YOUR_CLIENT_ID'; // Replace after creating OAuth app
+  const OAUTH_WORKER_URL = 'https://locus-oauth.justinpreston.workers.dev';
+
+  // ========================================
+  // GitHub Auth State
+  // ========================================
+  
+  function getGitHubToken() {
+    return localStorage.getItem('locus-github-token');
+  }
+  
+  function getGitHubUser() {
+    const data = localStorage.getItem('locus-github-user');
+    return data ? JSON.parse(data) : null;
+  }
+  
+  function isLoggedIn() {
+    return !!getGitHubToken();
+  }
+  
+  function loginWithGitHub() {
+    const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname + 'callback.html');
+    const scope = encodeURIComponent('public_repo');
+    const state = Math.random().toString(36).substring(7);
+    localStorage.setItem('locus-oauth-state', state);
+    
+    window.location.href = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
+  }
+  
+  function logout() {
+    localStorage.removeItem('locus-github-token');
+    localStorage.removeItem('locus-github-user');
+    localStorage.removeItem('locus-github-scope');
+    renderAuthUI();
+    renderCards();
+  }
+  
+  function renderAuthUI() {
+    const container = document.getElementById('auth-container');
+    if (!container) return;
+    
+    const user = getGitHubUser();
+    
+    if (user) {
+      container.innerHTML = `
+        <div class="user-info">
+          <img src="${user.avatar}" alt="${user.login}" class="user-avatar">
+          <span class="user-name">${user.name || user.login}</span>
+          <button class="logout-btn focus-ring" id="logout-btn" title="Logout">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      `;
+      document.getElementById('logout-btn').addEventListener('click', logout);
+    } else {
+      container.innerHTML = `
+        <button class="login-btn focus-ring" id="login-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+          </svg>
+          Login with GitHub
+        </button>
+      `;
+      document.getElementById('login-btn').addEventListener('click', loginWithGitHub);
+    }
+  }
+
+  // ========================================
+  // GitHub API with Auth
+  // ========================================
+  
+  async function updateIssueLabels(issueNumber, labelsToAdd, labelsToRemove) {
+    const token = getGitHubToken();
+    if (!token) {
+      alert('Please login with GitHub to update items');
+      return false;
+    }
+    
+    try {
+      // Get current labels
+      const issueRes = await fetch(`${GITHUB_API}/${issueNumber}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      
+      if (!issueRes.ok) throw new Error('Failed to fetch issue');
+      
+      const issue = await issueRes.json();
+      let labels = issue.labels.map(l => l.name);
+      
+      // Remove old labels
+      labelsToRemove.forEach(label => {
+        labels = labels.filter(l => l !== label);
+      });
+      
+      // Add new labels
+      labelsToAdd.forEach(label => {
+        if (!labels.includes(label)) {
+          labels.push(label);
+        }
+      });
+      
+      // Update issue
+      const updateRes = await fetch(`${GITHUB_API}/${issueNumber}`, {
+        method: 'PATCH',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ labels })
+      });
+      
+      if (!updateRes.ok) throw new Error('Failed to update issue');
+      
+      return true;
+    } catch (err) {
+      console.error('Error updating issue:', err);
+      alert('Failed to update: ' + err.message);
+      return false;
+    }
+  }
+  
+  async function updateIssueStatus(issueNumber, newStatus) {
+    const oldStatuses = STATUSES.map(s => `status:${s}`);
+    const newLabel = `status:${newStatus}`;
+    
+    // If marking as done, also close the issue
+    if (newStatus === 'done') {
+      const token = getGitHubToken();
+      if (token) {
+        await fetch(`${GITHUB_API}/${issueNumber}`, {
+          method: 'PATCH',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ state: 'closed' })
+        });
+      }
+    }
+    
+    return updateIssueLabels(issueNumber, [newLabel], oldStatuses.filter(s => s !== newLabel));
+  }
+
+  // ========================================
   // Config
   // ========================================
   
@@ -469,9 +620,87 @@
     await renderRoomFilters();
     await renderCards();
     setupEventListeners();
+    setupDragAndDrop();
+    renderAuthUI();
     
     console.log('🏛️ Locus initialized with GitHub Issues backend');
+    if (isLoggedIn()) {
+      console.log('📝 Logged in - drag & drop will sync to GitHub');
+    }
   }
+
+  // ========================================
+  // Drag and Drop
+  // ========================================
+  
+  function setupDragAndDrop() {
+    // Only enable if logged in
+    const columns = document.querySelectorAll('.column');
+    
+    columns.forEach(column => {
+      const cardsContainer = column.querySelector('.cards');
+      
+      cardsContainer.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        if (!isLoggedIn()) return;
+        column.classList.add('drag-over');
+      });
+      
+      cardsContainer.addEventListener('dragleave', () => {
+        column.classList.remove('drag-over');
+      });
+      
+      cardsContainer.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        column.classList.remove('drag-over');
+        
+        if (!isLoggedIn()) {
+          alert('Please login with GitHub to move items');
+          return;
+        }
+        
+        const cardId = e.dataTransfer.getData('text/plain');
+        const newStatus = column.dataset.status;
+        const item = state.items.find(i => i.id.toString() === cardId);
+        
+        if (item && item.status !== newStatus) {
+          // Optimistic update
+          const oldStatus = item.status;
+          item.status = newStatus;
+          renderCards();
+          
+          // Sync to GitHub
+          const success = await updateIssueStatus(item.issueNumber, newStatus);
+          
+          if (!success) {
+            // Rollback on failure
+            item.status = oldStatus;
+            renderCards();
+          }
+        }
+      });
+    });
+  }
+  
+  // Make cards draggable when rendering
+  const originalCreateCard = createCard;
+  createCard = function(item) {
+    const card = originalCreateCard(item);
+    
+    if (isLoggedIn()) {
+      card.draggable = true;
+      card.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', item.id);
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        document.querySelectorAll('.column').forEach(c => c.classList.remove('drag-over'));
+      });
+    }
+    
+    return card;
+  };
 
   init();
 
