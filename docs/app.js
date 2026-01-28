@@ -231,8 +231,11 @@
   let state = {
     items: [],
     activeRoom: 'all',
-    sortBy: localStorage.getItem('locus-sort') || 'priority'
+    sortBy: localStorage.getItem('locus-sort') || 'priority',
+    showOldDone: localStorage.getItem('locus-show-old-done') === 'true'
   };
+  
+  const ARCHIVE_DAYS = 30; // Hide done items older than this
 
   // ========================================
   // DOM References
@@ -509,11 +512,27 @@
 
   async function renderCards() {
     const filtered = getFilteredItems();
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
     
     for (const status of STATUSES) {
       const $container = document.getElementById(`cards-${status}`);
       const $count = document.getElementById(`count-${status}`);
-      const items = filtered.filter(item => item.status === status);
+      let items = filtered.filter(item => item.status === status);
+      
+      // For done column, filter out old items unless showOldDone is true
+      let hiddenCount = 0;
+      if (status === 'done' && !state.showOldDone) {
+        const cutoffDate = new Date(now);
+        cutoffDate.setDate(cutoffDate.getDate() - ARCHIVE_DAYS);
+        
+        const allDoneCount = items.length;
+        items = items.filter(item => {
+          const itemDate = new Date(item.created);
+          return itemDate >= cutoffDate;
+        });
+        hiddenCount = allDoneCount - items.length;
+      }
       
       // Apply sorting based on user preference
       sortItems(items, state.sortBy);
@@ -523,6 +542,10 @@
       
       if (items.length === 0) {
         $container.innerHTML = getEmptyStateHtml(status);
+        // Show archive toggle if there are hidden items
+        if (hiddenCount > 0) {
+          $container.insertAdjacentHTML('beforeend', getArchiveToggleHtml(hiddenCount));
+        }
         continue;
       }
       
@@ -530,7 +553,36 @@
         const card = await createCard(item);
         $container.appendChild(card);
       }
+      
+      // Show archive toggle at bottom of done column if there are hidden items
+      if (status === 'done' && hiddenCount > 0) {
+        $container.insertAdjacentHTML('beforeend', getArchiveToggleHtml(hiddenCount));
+      }
     }
+    
+    // Wire up archive toggle buttons
+    document.querySelectorAll('.archive-toggle').forEach(btn => {
+      btn.addEventListener('click', toggleShowOldDone);
+    });
+  }
+  
+  function getArchiveToggleHtml(hiddenCount) {
+    return `
+      <button class="archive-toggle">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 8v13H3V8"/>
+          <path d="M1 3h22v5H1z"/>
+          <path d="M10 12h4"/>
+        </svg>
+        ${state.showOldDone ? 'Hide' : 'Show'} ${hiddenCount} archived
+      </button>
+    `;
+  }
+  
+  function toggleShowOldDone() {
+    state.showOldDone = !state.showOldDone;
+    localStorage.setItem('locus-show-old-done', state.showOldDone);
+    renderCards();
   }
   
   function sortItems(items, sortBy) {

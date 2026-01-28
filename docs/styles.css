@@ -1443,3 +1443,31 @@ body {
   max-height: 200px;
   object-fit: contain;
 }
+
+/* Archive toggle button */
+.archive-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+  background: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--foreground-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.archive-toggle:hover {
+  background: var(--background);
+  border-color: var(--foreground-muted);
+  color: var(--foreground);
+}
+
+.archive-toggle svg {
+  opacity: 0.7;
+}
