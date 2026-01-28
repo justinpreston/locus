@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Locus — Your Memory Palace</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="branding">
+          <h1 class="logo">LOCUS</h1>
+          <p class="tagline">Your Memory Palace</p>
+        </div>
+        <div class="room-filters" id="room-filters">
+          <button class="room-btn active" data-room="all">
+            <span class="room-icon">🏛️</span>
+            <span class="room-name">All Rooms</span>
+          </button>
+          <!-- Room buttons populated by JS -->
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Board -->
+    <main class="board" id="board">
+      <div class="column" data-status="backlog">
+        <div class="column-header">
+          <h2 class="column-title">Backlog</h2>
+          <span class="column-count" id="count-backlog">0</span>
+        </div>
+        <div class="cards" id="cards-backlog"></div>
+      </div>
+
+      <div class="column" data-status="in_progress">
+        <div class="column-header">
+          <h2 class="column-title">In Progress</h2>
+          <span class="column-count" id="count-in_progress">0</span>
+        </div>
+        <div class="cards" id="cards-in_progress"></div>
+      </div>
+
+      <div class="column" data-status="blocked">
+        <div class="column-header">
+          <h2 class="column-title">Blocked</h2>
+          <span class="column-count" id="count-blocked">0</span>
+        </div>
+        <div class="cards" id="cards-blocked"></div>
+      </div>
+
+      <div class="column" data-status="done">
+        <div class="column-header">
+          <h2 class="column-title">Done</h2>
+          <span class="column-count" id="count-done">0</span>
+        </div>
+        <div class="cards" id="cards-done"></div>
+      </div>
+    </main>
+
+    <!-- Expanded Card Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+      <div class="modal" id="card-modal">
+        <button class="modal-close" id="modal-close">&times;</button>
+        <div class="modal-header">
+          <span class="modal-room-badge" id="modal-room-badge"></span>
+          <span class="modal-priority" id="modal-priority"></span>
+        </div>
+        <h2 class="modal-title" id="modal-title"></h2>
+        <div class="modal-meta">
+          <span class="modal-due" id="modal-due"></span>
+          <span class="modal-created" id="modal-created"></span>
+        </div>
+        <div class="modal-tags" id="modal-tags"></div>
+        <div class="modal-notes" id="modal-notes"></div>
+        <div class="modal-source" id="modal-source"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
