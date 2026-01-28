@@ -67,7 +67,7 @@
   }
   
   function loginWithGitHub() {
-    const redirectUri = encodeURIComponent(window.location.origin + window.location.pathname + 'callback.html');
+    const redirectUri = encodeURIComponent('https://justinpreston.github.io/locus/callback.html');
     const scope = encodeURIComponent('public_repo');
     const state = Math.random().toString(36).substring(7);
     localStorage.setItem('locus-oauth-state', state);
