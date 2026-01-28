@@ -320,6 +320,27 @@ body {
 }
 
 /* ========================================
+   Board Controls Bar
+   ======================================== */
+
+.board-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-6);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+@media (max-width: 768px) {
+  .board-controls {
+    padding: var(--space-3) var(--space-4);
+    justify-content: center;
+  }
+}
+
+/* ========================================
    Sort Controls
    ======================================== */
 

@@ -230,7 +230,8 @@
   
   let state = {
     items: [],
-    activeRoom: 'all'
+    activeRoom: 'all',
+    sortBy: localStorage.getItem('locus-sort') || 'priority'
   };
 
   // ========================================
@@ -514,9 +515,8 @@
       const $count = document.getElementById(`count-${status}`);
       const items = filtered.filter(item => item.status === status);
       
-      // Sort by priority: high → medium → low
-      const priorityOrder = { high: 0, medium: 1, low: 2 };
-      items.sort((a, b) => (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1));
+      // Apply sorting based on user preference
+      sortItems(items, state.sortBy);
       
       $count.textContent = items.length;
       $container.innerHTML = '';
@@ -531,6 +531,42 @@
         $container.appendChild(card);
       }
     }
+  }
+  
+  function sortItems(items, sortBy) {
+    const priorityOrder = { high: 0, medium: 1, low: 2 };
+    
+    switch (sortBy) {
+      case 'due':
+        // Due date soonest first, null dates at end
+        items.sort((a, b) => {
+          if (!a.due && !b.due) return 0;
+          if (!a.due) return 1;
+          if (!b.due) return -1;
+          return new Date(a.due) - new Date(b.due);
+        });
+        break;
+      
+      case 'priority':
+        // High → Medium → Low
+        items.sort((a, b) => (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1));
+        break;
+      
+      case 'recent':
+        // Most recently created first
+        items.sort((a, b) => new Date(b.created) - new Date(a.created));
+        break;
+      
+      default:
+        // Default to priority
+        items.sort((a, b) => (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1));
+    }
+  }
+  
+  function setSortBy(sortBy) {
+    state.sortBy = sortBy;
+    localStorage.setItem('locus-sort', sortBy);
+    renderCards();
   }
 
   async function createCard(item) {
@@ -801,6 +837,16 @@
     const themeToggle = document.getElementById('theme-toggle');
     if (themeToggle) {
       themeToggle.addEventListener('click', toggleTheme);
+    }
+    
+    // Sort select
+    const sortSelect = document.getElementById('sort-select');
+    if (sortSelect) {
+      // Set initial value from state
+      sortSelect.value = state.sortBy;
+      sortSelect.addEventListener('change', (e) => {
+        setSortBy(e.target.value);
+      });
     }
   }
 

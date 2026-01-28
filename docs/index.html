@@ -52,6 +52,18 @@
       </div>
     </header>
 
+    <!-- Sort Controls -->
+    <div class="board-controls">
+      <div class="sort-controls">
+        <label for="sort-select">Sort by:</label>
+        <select id="sort-select" class="sort-select focus-ring">
+          <option value="priority">Priority</option>
+          <option value="due">Due Date</option>
+          <option value="recent">Recently Added</option>
+        </select>
+      </div>
+    </div>
+
     <!-- Main Board -->
     <main class="board" id="board" aria-label="Task board">
       <section class="column" data-status="backlog" aria-label="Backlog">
