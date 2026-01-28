@@ -7,7 +7,9 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="hsl(240 10% 3.9%)">
+  <meta name="description" content="Locus - A personal memory palace for organizing tasks and ideas">
 </head>
 <body>
   <div class="app">
@@ -15,58 +17,65 @@
     <header class="header">
       <div class="header-content">
         <div class="branding">
-          <h1 class="logo">LOCUS</h1>
+          <h1 class="logo">
+            <span class="logo-icon">🏛️</span>
+            LOCUS
+          </h1>
           <p class="tagline">Your Memory Palace</p>
         </div>
-        <div class="room-filters" id="room-filters">
-          <button class="room-btn active" data-room="all">
+        <nav class="room-filters" id="room-filters" aria-label="Filter by room">
+          <button class="room-btn active focus-ring" data-room="all" aria-pressed="true">
             <span class="room-icon">🏛️</span>
             <span class="room-name">All Rooms</span>
           </button>
           <!-- Room buttons populated by JS -->
-        </div>
+        </nav>
       </div>
     </header>
 
     <!-- Main Board -->
-    <main class="board" id="board">
-      <div class="column" data-status="backlog">
+    <main class="board" id="board" aria-label="Task board">
+      <section class="column" data-status="backlog" aria-label="Backlog">
         <div class="column-header">
           <h2 class="column-title">Backlog</h2>
-          <span class="column-count" id="count-backlog">0</span>
+          <span class="column-count" id="count-backlog" aria-label="Item count">0</span>
         </div>
-        <div class="cards" id="cards-backlog"></div>
-      </div>
+        <div class="cards" id="cards-backlog" role="list"></div>
+      </section>
 
-      <div class="column" data-status="in_progress">
+      <section class="column" data-status="in_progress" aria-label="In Progress">
         <div class="column-header">
           <h2 class="column-title">In Progress</h2>
-          <span class="column-count" id="count-in_progress">0</span>
+          <span class="column-count" id="count-in_progress" aria-label="Item count">0</span>
         </div>
-        <div class="cards" id="cards-in_progress"></div>
-      </div>
+        <div class="cards" id="cards-in_progress" role="list"></div>
+      </section>
 
-      <div class="column" data-status="blocked">
+      <section class="column" data-status="blocked" aria-label="Blocked">
         <div class="column-header">
           <h2 class="column-title">Blocked</h2>
-          <span class="column-count" id="count-blocked">0</span>
+          <span class="column-count" id="count-blocked" aria-label="Item count">0</span>
         </div>
-        <div class="cards" id="cards-blocked"></div>
-      </div>
+        <div class="cards" id="cards-blocked" role="list"></div>
+      </section>
 
-      <div class="column" data-status="done">
+      <section class="column" data-status="done" aria-label="Done">
         <div class="column-header">
           <h2 class="column-title">Done</h2>
-          <span class="column-count" id="count-done">0</span>
+          <span class="column-count" id="count-done" aria-label="Item count">0</span>
         </div>
-        <div class="cards" id="cards-done"></div>
-      </div>
+        <div class="cards" id="cards-done" role="list"></div>
+      </section>
     </main>
 
     <!-- Expanded Card Modal -->
-    <div class="modal-overlay" id="modal-overlay">
+    <div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title">
       <div class="modal" id="card-modal">
-        <button class="modal-close" id="modal-close">&times;</button>
+        <button class="modal-close focus-ring" id="modal-close" aria-label="Close dialog">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M1 1l12 12M13 1L1 13"/>
+          </svg>
+        </button>
         <div class="modal-header">
           <span class="modal-room-badge" id="modal-room-badge"></span>
           <span class="modal-priority" id="modal-priority"></span>
@@ -80,14 +89,28 @@
         <div class="modal-notes" id="modal-notes"></div>
         <div class="modal-source" id="modal-source"></div>
         <div class="modal-actions">
-          <a href="https://github.com/justinpreston/locus/issues/new" target="_blank" class="add-btn">+ New Item</a>
+          <a href="https://github.com/justinpreston/locus/issues/new" target="_blank" rel="noopener" class="add-btn focus-ring">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M7 1v12M1 7h12"/>
+            </svg>
+            New Item
+          </a>
         </div>
       </div>
     </div>
   </div>
 
   <!-- Floating Add Button -->
-  <a href="https://github.com/justinpreston/locus/issues/new?labels=room:garden,status:backlog,priority:medium&title=New+Item" target="_blank" class="fab" title="Add new item">+</a>
+  <a href="https://github.com/justinpreston/locus/issues/new?labels=room:garden,status:backlog,priority:medium&title=New+Item" 
+     target="_blank" 
+     rel="noopener"
+     class="fab focus-ring" 
+     title="Add new item"
+     aria-label="Add new item">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <path d="M10 3v14M3 10h14"/>
+    </svg>
+  </a>
 
   <script src="app.js"></script>
 </body>
