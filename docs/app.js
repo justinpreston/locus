@@ -413,6 +413,99 @@
     return state.items.filter(item => item.room === state.activeRoom);
   }
 
+  // ========================================
+  // Empty States
+  // ========================================
+
+  function getEmptyStateHtml(status) {
+    const issueUrl = `https://github.com/${REPO_OWNER}/${REPO_NAME}/issues/new?labels=status:backlog`;
+    
+    const emptyStates = {
+      backlog: {
+        icon: '📋',
+        title: 'Nothing planned yet',
+        subtitle: 'Start by adding your first item',
+        cta: `<a href="${issueUrl}" target="_blank" rel="noopener" class="empty-state-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+          Add your first item
+        </a>`
+      },
+      in_progress: {
+        icon: '🚀',
+        title: 'Nothing in flight',
+        subtitle: 'Drag items here to start working',
+        cta: null
+      },
+      blocked: {
+        icon: '✨',
+        title: 'All clear!',
+        subtitle: 'No blockers — keep the momentum',
+        cta: null
+      },
+      done: {
+        icon: '🎯',
+        title: 'Ready to celebrate',
+        subtitle: 'Complete some tasks to see them here',
+        cta: null
+      }
+    };
+    
+    const state = emptyStates[status] || emptyStates.backlog;
+    
+    return `
+      <div class="empty-state-container">
+        <span class="empty-state-icon">${state.icon}</span>
+        <span class="empty-state-title">${state.title}</span>
+        <span class="empty-state-subtitle">${state.subtitle}</span>
+        ${state.cta || ''}
+      </div>
+    `;
+  }
+
+  // ========================================
+  // Loading Skeletons
+  // ========================================
+
+  function renderSkeletons() {
+    for (const status of STATUSES) {
+      const $container = document.getElementById(`cards-${status}`);
+      const $count = document.getElementById(`count-${status}`);
+      
+      $count.textContent = '—';
+      $container.innerHTML = '';
+      
+      // Add 2-3 skeleton cards per column
+      const skeletonCount = status === 'backlog' ? 3 : 2;
+      for (let i = 0; i < skeletonCount; i++) {
+        $container.innerHTML += createSkeletonCard();
+      }
+    }
+  }
+
+  function createSkeletonCard() {
+    return `
+      <div class="skeleton-card">
+        <div class="skeleton-title skeleton-shimmer"></div>
+        <div class="skeleton-preview skeleton-shimmer"></div>
+        <div class="skeleton-meta">
+          <div class="skeleton-badge skeleton-shimmer"></div>
+          <div class="skeleton-date skeleton-shimmer"></div>
+        </div>
+        <div class="skeleton-tags">
+          <div class="skeleton-tag skeleton-shimmer"></div>
+          <div class="skeleton-tag skeleton-shimmer"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function removeSkeletons() {
+    document.querySelectorAll('.skeleton-card').forEach(el => el.remove());
+  }
+
   async function renderCards() {
     const filtered = getFilteredItems();
     
@@ -429,7 +522,7 @@
       $container.innerHTML = '';
       
       if (items.length === 0) {
-        $container.innerHTML = '<div class="empty-state">No items</div>';
+        $container.innerHTML = getEmptyStateHtml(status);
         continue;
       }
       
@@ -458,8 +551,18 @@
       const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
       
       let dueClass = '';
-      if (diffDays < 0) dueClass = 'overdue';
-      else if (diffDays <= 7) dueClass = 'soon';
+      let dueLabel = formatDate(item.due);
+      if (diffDays < 0) {
+        dueClass = 'overdue';
+        dueLabel = `Overdue (${formatDate(item.due)})`;
+      } else if (diffDays <= 3) {
+        dueClass = 'due-soon';
+        if (diffDays === 0) dueLabel = 'Due today';
+        else if (diffDays === 1) dueLabel = 'Due tomorrow';
+        else dueLabel = `Due in ${diffDays} days`;
+      } else if (diffDays <= 7) {
+        dueClass = 'due-week';
+      }
       
       dueHtml = `<span class="card-due ${dueClass}">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -468,7 +571,7 @@
           <line x1="8" y1="2" x2="8" y2="6"/>
           <line x1="3" y1="10" x2="21" y2="10"/>
         </svg>
-        ${formatDate(item.due)}
+        ${dueLabel}
       </span>`;
     }
     
@@ -543,13 +646,37 @@
     $modal.title.textContent = item.title;
     
     $modal.due.innerHTML = item.due 
-      ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-           <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-           <line x1="16" y1="2" x2="16" y2="6"/>
-           <line x1="8" y1="2" x2="8" y2="6"/>
-           <line x1="3" y1="10" x2="21" y2="10"/>
-         </svg>
-         Due: ${formatDate(item.due)}`
+      ? (() => {
+          const dueDate = new Date(item.due);
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          const diffDays = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+          
+          let dueClass = '';
+          let dueLabel = `Due: ${formatDate(item.due)}`;
+          if (diffDays < 0) {
+            dueClass = 'modal-due-badge overdue';
+            dueLabel = `Overdue by ${Math.abs(diffDays)} day${Math.abs(diffDays) !== 1 ? 's' : ''}`;
+          } else if (diffDays <= 3) {
+            dueClass = 'modal-due-badge due-soon';
+            if (diffDays === 0) dueLabel = 'Due today!';
+            else if (diffDays === 1) dueLabel = 'Due tomorrow';
+            else dueLabel = `Due in ${diffDays} days`;
+          } else if (diffDays <= 7) {
+            dueClass = 'modal-due-badge due-week';
+            dueLabel = `Due ${formatDate(item.due)}`;
+          }
+          
+          return `<span class="${dueClass}">
+           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+             <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+             <line x1="16" y1="2" x2="16" y2="6"/>
+             <line x1="8" y1="2" x2="8" y2="6"/>
+             <line x1="3" y1="10" x2="21" y2="10"/>
+           </svg>
+           ${dueLabel}
+         </span>`;
+        })()
       : '';
     
     $modal.created.innerHTML = item.created 
@@ -682,6 +809,9 @@
   // ========================================
 
   async function init() {
+    // Show loading skeletons immediately
+    renderSkeletons();
+    
     const loaded = await loadData();
     
     if (!loaded) {
@@ -694,7 +824,7 @@
     }
     
     await renderRoomFilters();
-    await renderCards();
+    await renderCards(); // This replaces skeletons with real cards
     setupEventListeners();
     setupDragAndDrop();
     renderAuthUI();

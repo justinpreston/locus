@@ -320,6 +320,47 @@ body {
 }
 
 /* ========================================
+   Sort Controls
+   ======================================== */
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.8125rem;
+}
+
+.sort-controls label {
+  color: var(--foreground-muted);
+  font-weight: 500;
+}
+
+.sort-select {
+  appearance: none;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-8) var(--space-2) var(--space-3);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-2) center;
+}
+
+.sort-select:hover {
+  border-color: var(--accent-border);
+}
+
+.sort-select:focus {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ========================================
    Board (Kanban)
    ======================================== */
 
@@ -509,14 +550,35 @@ body {
   display: flex;
   align-items: center;
   gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--muted);
 }
 
 .card-due.overdue {
-  color: var(--destructive);
+  color: white;
+  background: var(--destructive);
+  animation: pulse-glow 2s ease-in-out infinite;
 }
 
-.card-due.soon {
+.card-due.due-soon {
+  color: hsl(38 92% 20%);
+  background: var(--warning);
+  font-weight: 500;
+}
+
+.card-due.due-week {
   color: var(--warning);
+  background: hsla(38 92% 50% / 0.15);
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    box-shadow: 0 0 0 0 hsla(0 62% 50% / 0.4);
+  }
+  50% { 
+    box-shadow: 0 0 0 4px hsla(0 62% 50% / 0);
+  }
 }
 
 .card-tags {
@@ -665,6 +727,31 @@ body {
 
 .modal-meta span:empty {
   display: none;
+}
+
+/* Modal due date badges */
+.modal-due-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+}
+
+.modal-due-badge.overdue {
+  background: var(--destructive);
+  color: white;
+}
+
+.modal-due-badge.due-soon {
+  background: var(--warning);
+  color: hsl(38 92% 20%);
+}
+
+.modal-due-badge.due-week {
+  background: hsla(38 92% 50% / 0.15);
+  color: var(--warning);
 }
 
 .modal-tags {
@@ -928,6 +1015,135 @@ body {
   text-align: center;
   color: var(--foreground-subtle);
   font-size: 0.8125rem;
+}
+
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-4);
+  text-align: center;
+  gap: var(--space-2);
+}
+
+.empty-state-icon {
+  font-size: 2rem;
+  line-height: 1;
+  margin-bottom: var(--space-2);
+  opacity: 0.8;
+}
+
+.empty-state-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--foreground-muted);
+}
+
+.empty-state-subtitle {
+  font-size: 0.75rem;
+  color: var(--foreground-subtle);
+  max-width: 180px;
+  line-height: 1.4;
+}
+
+.empty-state-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.empty-state-btn:hover {
+  background: var(--background);
+  border-color: var(--accent-border);
+  box-shadow: var(--shadow-sm);
+}
+
+.empty-state-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ========================================
+   Loading Skeleton
+   ======================================== */
+
+.skeleton-card {
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    var(--border) 50%,
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-title {
+  height: 16px;
+  width: 75%;
+}
+
+.skeleton-preview {
+  height: 12px;
+  width: 90%;
+}
+
+.skeleton-meta {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.skeleton-badge {
+  height: 20px;
+  width: 80px;
+  border-radius: var(--radius-full);
+}
+
+.skeleton-date {
+  height: 20px;
+  width: 60px;
+}
+
+.skeleton-tags {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.skeleton-tag {
+  height: 18px;
+  width: 50px;
+  border-radius: var(--radius-full);
 }
 
 /* ========================================
