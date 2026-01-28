@@ -1,50 +1,36 @@
 /**
  * LOCUS - Memory Palace Dashboard
- * Vanilla JS Kanban Board
+ * GitHub Issues Backend
  */
 
 (function() {
   'use strict';
 
   // ========================================
+  // Config
+  // ========================================
+  
+  const REPO_OWNER = 'justinpreston';
+  const REPO_NAME = 'locus';
+  const GITHUB_API = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/issues`;
+  
+  const ROOMS = {
+    vault: { name: 'The Vault', description: 'Trading, finance, and investments', icon: '🏦', color: '#D4AF37' },
+    hearth: { name: 'The Hearth', description: 'Family, home, and personal', icon: '🏠', color: '#E07A5F' },
+    workshop: { name: 'The Workshop', description: 'Tech projects and tools', icon: '🔧', color: '#81B29A' },
+    garden: { name: 'The Garden', description: 'Ideas and someday/maybe', icon: '🌱', color: '#9B72AA' },
+    archive: { name: 'The Archive', description: 'Completed and reference', icon: '📜', color: '#6B7280' }
+  };
+
+  const STATUSES = ['backlog', 'in_progress', 'blocked', 'done'];
+
+  // ========================================
   // State
   // ========================================
   
   let state = {
-    rooms: {},
     items: [],
     activeRoom: 'all'
-  };
-
-  const STORAGE_KEY = 'locus_items';
-  const STATUSES = ['backlog', 'in_progress', 'blocked', 'done'];
-
-  // Embedded data for file:// protocol fallback
-  const EMBEDDED_DATA = {
-    "rooms": {
-      "vault": { "name": "The Vault", "description": "Trading, finance, and investments", "icon": "🏦", "color": "#D4AF37" },
-      "hearth": { "name": "The Hearth", "description": "Family, home, and personal", "icon": "🏠", "color": "#E07A5F" },
-      "workshop": { "name": "The Workshop", "description": "Tech projects and tools", "icon": "🔧", "color": "#81B29A" },
-      "garden": { "name": "The Garden", "description": "Ideas and someday/maybe", "icon": "🌱", "color": "#9B72AA" },
-      "archive": { "name": "The Archive", "description": "Completed and reference", "icon": "📜", "color": "#6B7280" }
-    },
-    "items": [
-      { "id": "vault-001", "title": "Track DLA Strategic Materials announcement", "room": "vault", "status": "in_progress", "priority": "high", "due": "2026-02-11", "source": "memory/2025-01-27.md", "notes": "Major catalyst for critical minerals plays (UUUU, UAMY, MP)", "tags": ["catalyst", "trading", "meridian"], "created": "2026-01-27" },
-      { "id": "vault-002", "title": "Track DOE NOFO awards", "room": "vault", "status": "in_progress", "priority": "high", "due": "2026-02-23", "source": "memory/2025-01-27.md", "notes": "DOE funding announcements for critical minerals", "tags": ["catalyst", "trading", "meridian"], "created": "2026-01-27" },
-      { "id": "vault-003", "title": "Automate Fidelity position scraping", "room": "vault", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2025-01-27.md", "notes": "Use browser automation to scrape positions from Fidelity tab.", "tags": ["automation", "portfolio"], "created": "2026-01-27" },
-      { "id": "vault-004", "title": "Set up Reddit Radar daily cron", "room": "vault", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-27.md", "notes": "Daily digest of Reddit mentions. ApeWisdom.io + QuiverQuant.", "tags": ["automation", "reddit"], "created": "2026-01-27" },
-      { "id": "workshop-001", "title": "Build Locus dashboard", "room": "workshop", "status": "done", "priority": "high", "due": null, "source": "memory/2025-01-27.md", "notes": "Self-hosted project board with memory palace metaphor. ✅ Complete!", "tags": ["project", "dashboard"], "created": "2026-01-27" },
-      { "id": "workshop-002", "title": "VPS migration & off-site backup", "room": "workshop", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2026-01-27.md", "notes": "Current backup is local only. Need cloud/off-site push.", "tags": ["infrastructure", "backup"], "created": "2026-01-27" },
-      { "id": "workshop-003", "title": "Moltbot migration", "room": "workshop", "status": "backlog", "priority": "low", "due": null, "source": "memory/2025-01-27.md", "notes": "Clawdbot → Moltbot rebrand. Wait for official migration path.", "tags": ["migration"], "created": "2026-01-27" },
-      { "id": "workshop-004", "title": "Investigate awesome-moltbot-skills repo", "room": "workshop", "status": "backlog", "priority": "low", "due": null, "source": "memory/2025-01-27.md", "notes": "https://github.com/VoltAgent/awesome-moltbot-skills", "tags": ["research", "skills"], "created": "2026-01-27" },
-      { "id": "workshop-005", "title": "Claude Connect setup", "room": "workshop", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-26.md", "notes": "Claude CLI not installed, using API key instead", "tags": ["setup"], "created": "2026-01-26" },
-      { "id": "workshop-006", "title": "Discord bot - fix message receiving", "room": "workshop", "status": "in_progress", "priority": "medium", "due": null, "source": "memory/2026-01-27.md", "notes": "Bot can send but not receive. Reset in progress.", "tags": ["discord", "bot"], "created": "2026-01-27" },
-      { "id": "hearth-001", "title": "Dawson therapy follow-up", "room": "hearth", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2025-01-27.md", "notes": "Shamieka emailed therapist about PTSD signs to watch for.", "tags": ["family", "dawson"], "created": "2026-01-27" },
-      { "id": "hearth-002", "title": "Citizens Bank payment issue", "room": "hearth", "status": "backlog", "priority": "medium", "due": null, "source": "memory/2026-01-26.md", "notes": "Shamieka forwarded failed payment, needs JP's help", "tags": ["family", "finance"], "created": "2026-01-26" },
-      { "id": "hearth-003", "title": "Kids' missing work follow-up", "room": "hearth", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-26.md", "notes": "Science 8 notification for one of the kids", "tags": ["family", "school"], "created": "2026-01-26" },
-      { "id": "garden-001", "title": "Notion integration experiment", "room": "garden", "status": "backlog", "priority": "low", "due": null, "source": "memory/2025-01-27.md", "notes": "Parallel experiment alongside Locus.", "tags": ["idea", "integration"], "created": "2026-01-27" },
-      { "id": "garden-002", "title": "Google Calendar re-auth", "room": "garden", "status": "backlog", "priority": "low", "due": null, "source": "memory/2026-01-26.md", "notes": "Needs calendar scope added to OAuth", "tags": ["setup", "google"], "created": "2026-01-26" }
-    ]
   };
 
   // ========================================
@@ -66,42 +52,72 @@
   };
 
   // ========================================
-  // Data Loading
+  // Data Loading from GitHub Issues
   // ========================================
 
   async function loadData() {
     try {
-      // Try to load from localStorage first (for persisted changes)
-      const stored = localStorage.getItem(STORAGE_KEY);
+      // Fetch all issues (open and closed)
+      const [openRes, closedRes] = await Promise.all([
+        fetch(`${GITHUB_API}?state=open&per_page=100`),
+        fetch(`${GITHUB_API}?state=closed&per_page=100`)
+      ]);
       
-      let data;
-      
-      // Try fetch first (works with http server)
-      try {
-        const response = await fetch('./data/projects.json');
-        if (response.ok) {
-          data = await response.json();
-        } else {
-          throw new Error('Fetch failed');
-        }
-      } catch (fetchError) {
-        // Fall back to embedded data (for file:// protocol)
-        console.log('Using embedded data (file:// protocol detected)');
-        data = EMBEDDED_DATA;
+      if (!openRes.ok || !closedRes.ok) {
+        throw new Error('Failed to fetch issues');
       }
       
-      state.rooms = data.rooms;
+      const openIssues = await openRes.json();
+      const closedIssues = await closedRes.json();
+      const allIssues = [...openIssues, ...closedIssues];
       
-      // Use stored items if available, otherwise use file data
-      if (stored) {
-        try {
-          state.items = JSON.parse(stored);
-        } catch (e) {
-          state.items = data.items;
+      // Transform issues to our item format
+      state.items = allIssues.map(issue => {
+        const labels = issue.labels.map(l => l.name);
+        
+        // Extract room from labels
+        const roomLabel = labels.find(l => l.startsWith('room:'));
+        const room = roomLabel ? roomLabel.replace('room:', '') : 'garden';
+        
+        // Extract status from labels
+        const statusLabel = labels.find(l => l.startsWith('status:'));
+        let status = statusLabel ? statusLabel.replace('status:', '') : 'backlog';
+        
+        // If issue is closed, mark as done
+        if (issue.state === 'closed') {
+          status = 'done';
         }
-      } else {
-        state.items = data.items;
-      }
+        
+        // Extract priority from labels
+        const priorityLabel = labels.find(l => l.startsWith('priority:'));
+        const priority = priorityLabel ? priorityLabel.replace('priority:', '') : 'medium';
+        
+        // Extract due date from body if present
+        const dueMatch = issue.body?.match(/\*\*Due:\*\*\s*(\d{4}-\d{2}-\d{2})/);
+        const due = dueMatch ? dueMatch[1] : null;
+        
+        // Extract tags from body if present
+        const tagsMatch = issue.body?.match(/\*\*Tags:\*\*\s*(.+)/);
+        const tags = tagsMatch ? tagsMatch[1].split(',').map(t => t.trim()) : [];
+        
+        // Clean notes (remove metadata)
+        let notes = issue.body || '';
+        notes = notes.replace(/\*\*Due:\*\*.+/g, '').replace(/\*\*Tags:\*\*.+/g, '').trim();
+        
+        return {
+          id: issue.number,
+          title: issue.title,
+          room,
+          status,
+          priority,
+          due,
+          notes,
+          tags,
+          created: issue.created_at.split('T')[0],
+          url: issue.html_url,
+          issueNumber: issue.number
+        };
+      });
       
       return true;
     } catch (error) {
@@ -110,19 +126,12 @@
     }
   }
 
-  function saveToStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.items));
-  }
-
   // ========================================
   // Rendering
   // ========================================
 
   function renderRoomFilters() {
-    // Keep the "All Rooms" button, add others
-    const existing = $roomFilters.querySelector('[data-room="all"]');
-    
-    Object.entries(state.rooms).forEach(([key, room]) => {
+    Object.entries(ROOMS).forEach(([key, room]) => {
       const btn = document.createElement('button');
       btn.className = 'room-btn';
       btn.dataset.room = key;
@@ -138,7 +147,6 @@
   function setActiveRoom(roomKey) {
     state.activeRoom = roomKey;
     
-    // Update button states
     document.querySelectorAll('.room-btn').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.room === roomKey);
     });
@@ -174,12 +182,11 @@
   }
 
   function createCard(item) {
-    const room = state.rooms[item.room];
+    const room = ROOMS[item.room] || ROOMS.garden;
     const card = document.createElement('div');
     card.className = 'card';
     card.dataset.id = item.id;
     card.dataset.room = item.room;
-    card.draggable = true;
     
     // Due date formatting
     let dueHtml = '';
@@ -215,21 +222,13 @@
     `;
     
     // Click to expand
-    card.addEventListener('click', (e) => {
-      if (!card.classList.contains('dragging')) {
-        openModal(item);
-      }
-    });
-    
-    // Drag events
-    card.addEventListener('dragstart', handleDragStart);
-    card.addEventListener('dragend', handleDragEnd);
+    card.addEventListener('click', () => openModal(item));
     
     return card;
   }
 
   function openModal(item) {
-    const room = state.rooms[item.room];
+    const room = ROOMS[item.room] || ROOMS.garden;
     
     $modal.roomBadge.innerHTML = `${room.icon} ${room.name}`;
     $modal.roomBadge.style.color = room.color;
@@ -253,8 +252,9 @@
     
     $modal.notes.textContent = item.notes || '';
     
-    $modal.source.innerHTML = item.source 
-      ? `Source: ${escapeHtml(item.source)}`
+    // Link to GitHub issue for editing
+    $modal.source.innerHTML = item.url 
+      ? `<a href="${item.url}" target="_blank" class="edit-link">✏️ Edit on GitHub (Issue #${item.issueNumber})</a>`
       : '';
     
     $modalOverlay.classList.add('active');
@@ -264,85 +264,6 @@
   function closeModal() {
     $modalOverlay.classList.remove('active');
     document.body.style.overflow = '';
-  }
-
-  // ========================================
-  // Drag & Drop
-  // ========================================
-
-  let draggedCard = null;
-
-  function handleDragStart(e) {
-    draggedCard = e.target;
-    e.target.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', e.target.dataset.id);
-    
-    // Add drag-over listeners to columns
-    document.querySelectorAll('.cards').forEach(col => {
-      col.addEventListener('dragover', handleDragOver);
-      col.addEventListener('dragenter', handleDragEnter);
-      col.addEventListener('dragleave', handleDragLeave);
-      col.addEventListener('drop', handleDrop);
-    });
-  }
-
-  function handleDragEnd(e) {
-    e.target.classList.remove('dragging');
-    draggedCard = null;
-    
-    // Remove drag-over styling
-    document.querySelectorAll('.column').forEach(col => {
-      col.classList.remove('drag-over');
-    });
-    
-    // Remove listeners
-    document.querySelectorAll('.cards').forEach(col => {
-      col.removeEventListener('dragover', handleDragOver);
-      col.removeEventListener('dragenter', handleDragEnter);
-      col.removeEventListener('dragleave', handleDragLeave);
-      col.removeEventListener('drop', handleDrop);
-    });
-  }
-
-  function handleDragOver(e) {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
-  }
-
-  function handleDragEnter(e) {
-    e.preventDefault();
-    const column = e.target.closest('.column');
-    if (column) {
-      column.classList.add('drag-over');
-    }
-  }
-
-  function handleDragLeave(e) {
-    const column = e.target.closest('.column');
-    if (column && !column.contains(e.relatedTarget)) {
-      column.classList.remove('drag-over');
-    }
-  }
-
-  function handleDrop(e) {
-    e.preventDefault();
-    
-    const column = e.target.closest('.column');
-    if (!column || !draggedCard) return;
-    
-    const newStatus = column.dataset.status;
-    const itemId = draggedCard.dataset.id;
-    
-    // Update item status
-    const item = state.items.find(i => i.id === itemId);
-    if (item && item.status !== newStatus) {
-      item.status = newStatus;
-      saveToStorage();
-      renderCards();
-    }
-    
-    column.classList.remove('drag-over');
   }
 
   // ========================================
@@ -369,13 +290,11 @@
   // ========================================
 
   function setupEventListeners() {
-    // Room filter: "All Rooms" button
     const allRoomsBtn = $roomFilters.querySelector('[data-room="all"]');
     if (allRoomsBtn) {
       allRoomsBtn.addEventListener('click', () => setActiveRoom('all'));
     }
     
-    // Modal close
     $modalClose.addEventListener('click', closeModal);
     $modalOverlay.addEventListener('click', (e) => {
       if (e.target === $modalOverlay) {
@@ -383,7 +302,6 @@
       }
     });
     
-    // Escape key closes modal
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         closeModal();
@@ -400,8 +318,8 @@
     
     if (!loaded) {
       document.querySelector('.board').innerHTML = `
-        <div class="loading" style="grid-column: 1/-1;">
-          Failed to load data. Check console for errors.
+        <div class="loading" style="grid-column: 1/-1; text-align: center; padding: 2rem;">
+          Failed to load data from GitHub. Check console for errors.
         </div>
       `;
       return;
@@ -411,10 +329,9 @@
     renderCards();
     setupEventListeners();
     
-    console.log('🏛️ Locus initialized');
+    console.log('🏛️ Locus initialized with GitHub Issues backend');
   }
 
-  // Start
   init();
 
 })();

@@ -611,3 +611,89 @@ body {
   color: var(--text-muted);
   font-size: 0.875rem;
 }
+
+/* ========================================
+   GitHub Integration Styles
+   ======================================== */
+
+.edit-link {
+  display: inline-block;
+  color: var(--gold);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--gold-dim);
+  border-radius: var(--radius-sm);
+  margin-top: 1rem;
+  transition: all var(--transition-fast);
+}
+
+.edit-link:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold);
+}
+
+.modal-actions {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.add-btn {
+  display: inline-block;
+  background: var(--gold);
+  color: var(--bg-primary);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.add-btn:hover {
+  background: #e5c453;
+  transform: translateY(-1px);
+}
+
+/* Floating add button */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 56px;
+  height: 56px;
+  background: var(--gold);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 50%;
+  font-size: 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: all var(--transition-fast);
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* Refresh button */
+.refresh-btn {
+  background: transparent;
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all var(--transition-fast);
+  margin-left: 1rem;
+}
+
+.refresh-btn:hover {
+  background: var(--gold-dim);
+}
