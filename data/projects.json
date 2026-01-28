@@ -7,7 +7,7 @@
       "color": "#D4AF37"
     },
     "hearth": {
-      "name": "The Hearth", 
+      "name": "The Hearth",
       "description": "Family, home, and personal",
       "icon": "🏠",
       "color": "#E07A5F"
@@ -41,7 +41,11 @@
       "due": "2026-02-11",
       "source": "memory/2025-01-27.md",
       "notes": "Major catalyst for critical minerals plays (UUUU, UAMY, MP)",
-      "tags": ["catalyst", "trading", "meridian"],
+      "tags": [
+        "catalyst",
+        "trading",
+        "meridian"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -53,7 +57,11 @@
       "due": "2026-02-23",
       "source": "memory/2025-01-27.md",
       "notes": "DOE funding announcements for critical minerals",
-      "tags": ["catalyst", "trading", "meridian"],
+      "tags": [
+        "catalyst",
+        "trading",
+        "meridian"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -65,7 +73,10 @@
       "due": null,
       "source": "memory/2025-01-27.md",
       "notes": "Use browser automation to scrape positions from Fidelity tab. Blocked by timeouts previously.",
-      "tags": ["automation", "portfolio"],
+      "tags": [
+        "automation",
+        "portfolio"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -77,19 +88,25 @@
       "due": null,
       "source": "memory/2026-01-27.md",
       "notes": "Daily digest of Reddit mentions for holdings. ApeWisdom.io + QuiverQuant.",
-      "tags": ["automation", "reddit"],
+      "tags": [
+        "automation",
+        "reddit"
+      ],
       "created": "2026-01-27"
     },
     {
       "id": "workshop-001",
       "title": "Build Locus dashboard",
       "room": "workshop",
-      "status": "in_progress",
+      "status": "done",
       "priority": "high",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Self-hosted project board with memory palace metaphor. This project!",
-      "tags": ["project", "dashboard"],
+      "notes": "Self-hosted project board with memory palace metaphor. ✅ Complete!",
+      "tags": [
+        "project",
+        "dashboard"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -101,7 +118,10 @@
       "due": null,
       "source": "memory/2026-01-27.md",
       "notes": "Current backup is local only. Need cloud/off-site push.",
-      "tags": ["infrastructure", "backup"],
+      "tags": [
+        "infrastructure",
+        "backup"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -113,7 +133,9 @@
       "due": null,
       "source": "memory/2025-01-27.md",
       "notes": "Clawdbot → Moltbot rebrand. Wait for official migration path before switching.",
-      "tags": ["migration"],
+      "tags": [
+        "migration"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -125,7 +147,10 @@
       "due": null,
       "source": "memory/2025-01-27.md",
       "notes": "https://github.com/VoltAgent/awesome-moltbot-skills - community skills",
-      "tags": ["research", "skills"],
+      "tags": [
+        "research",
+        "skills"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -137,7 +162,9 @@
       "due": null,
       "source": "memory/2026-01-26.md",
       "notes": "Claude CLI not installed, using API key instead",
-      "tags": ["setup"],
+      "tags": [
+        "setup"
+      ],
       "created": "2026-01-26"
     },
     {
@@ -149,7 +176,10 @@
       "due": null,
       "source": "memory/2026-01-27.md",
       "notes": "Bot can send but not receive. Reset in progress - need new token + IDs.",
-      "tags": ["discord", "bot"],
+      "tags": [
+        "discord",
+        "bot"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -161,7 +191,10 @@
       "due": null,
       "source": "memory/2025-01-27.md",
       "notes": "Shamieka emailed therapist about PTSD signs to watch for after movie incident.",
-      "tags": ["family", "dawson"],
+      "tags": [
+        "family",
+        "dawson"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -173,7 +206,10 @@
       "due": null,
       "source": "memory/2026-01-26.md",
       "notes": "Shamieka forwarded failed payment, needs JP's help",
-      "tags": ["family", "finance"],
+      "tags": [
+        "family",
+        "finance"
+      ],
       "created": "2026-01-26"
     },
     {
@@ -185,7 +221,10 @@
       "due": null,
       "source": "memory/2026-01-26.md",
       "notes": "Science 8 notification for one of the kids",
-      "tags": ["family", "school"],
+      "tags": [
+        "family",
+        "school"
+      ],
       "created": "2026-01-26"
     },
     {
@@ -197,7 +236,10 @@
       "due": null,
       "source": "memory/2025-01-27.md",
       "notes": "Parallel experiment alongside Locus. Notion has good kanban UX.",
-      "tags": ["idea", "integration"],
+      "tags": [
+        "idea",
+        "integration"
+      ],
       "created": "2026-01-27"
     },
     {
@@ -209,7 +251,10 @@
       "due": null,
       "source": "memory/2026-01-26.md",
       "notes": "Needs calendar scope added to OAuth",
-      "tags": ["setup", "google"],
+      "tags": [
+        "setup",
+        "google"
+      ],
       "created": "2026-01-26"
     }
   ]
