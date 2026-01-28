@@ -73,7 +73,7 @@
       try {
         // Exchange code for token via our Cloudflare Worker
         const WORKER_URL = localStorage.getItem('locus-oauth-worker') || 
-          'https://locus-oauth.justinpreston.workers.dev';
+          'https://locus-oauth.jdogg98.workers.dev';
         
         const response = await fetch(`${WORKER_URL}/token`, {
           method: 'POST',

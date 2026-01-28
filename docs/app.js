@@ -46,8 +46,8 @@
   // GitHub OAuth Config
   // ========================================
   
-  const GITHUB_CLIENT_ID = 'YOUR_CLIENT_ID'; // Replace after creating OAuth app
-  const OAUTH_WORKER_URL = 'https://locus-oauth.justinpreston.workers.dev';
+  const GITHUB_CLIENT_ID = 'Ov23liGW2CdVdLTCDEzO';
+  const OAUTH_WORKER_URL = 'https://locus-oauth.jdogg98.workers.dev';
 
   // ========================================
   // GitHub Auth State
