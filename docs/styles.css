@@ -1190,3 +1190,19 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Fix modal room badge icon sizing */
+.modal-room-badge img {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+/* Prevent any images in modal from being huge */
+.modal img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+}
