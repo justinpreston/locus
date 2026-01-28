@@ -80,7 +80,8 @@
     localStorage.removeItem('locus-github-user');
     localStorage.removeItem('locus-github-scope');
     renderAuthUI();
-    renderCards();
+    // Reload page to reset state properly
+    window.location.reload();
   }
   
   function renderAuthUI() {
@@ -298,10 +299,17 @@
 
   async function loadData() {
     try {
+      // Build headers - use auth token if available for higher rate limits
+      const headers = {};
+      const token = getGitHubToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       // Fetch all issues (open and closed)
       const [openRes, closedRes] = await Promise.all([
-        fetch(`${GITHUB_API}?state=open&per_page=100`),
-        fetch(`${GITHUB_API}?state=closed&per_page=100`)
+        fetch(`${GITHUB_API}?state=open&per_page=100`, { headers }),
+        fetch(`${GITHUB_API}?state=closed&per_page=100`, { headers })
       ]);
       
       if (!openRes.ok || !closedRes.ok) {
@@ -388,7 +396,7 @@
     }
   }
 
-  function setActiveRoom(roomKey) {
+  async function setActiveRoom(roomKey) {
     state.activeRoom = roomKey;
     
     document.querySelectorAll('.room-btn').forEach(btn => {
@@ -397,7 +405,7 @@
       btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
     
-    renderCards();
+    await renderCards();
   }
 
   function getFilteredItems() {
