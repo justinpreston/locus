@@ -421,6 +421,10 @@
       const $count = document.getElementById(`count-${status}`);
       const items = filtered.filter(item => item.status === status);
       
+      // Sort by priority: high → medium → low
+      const priorityOrder = { high: 0, medium: 1, low: 2 };
+      items.sort((a, b) => (priorityOrder[a.priority] ?? 1) - (priorityOrder[b.priority] ?? 1));
+      
       $count.textContent = items.length;
       $container.innerHTML = '';
       
