@@ -1117,3 +1117,76 @@ body {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
+
+/* Modal notes markdown styling */
+.modal-notes h2,
+.modal-notes h3,
+.modal-notes h4 {
+  margin: 0 0 var(--space-2) 0;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.modal-notes h2 { font-size: 1.1rem; }
+.modal-notes h3 { font-size: 1rem; }
+.modal-notes h4 { font-size: 0.9rem; }
+
+.modal-notes ul {
+  margin: var(--space-2) 0;
+  padding-left: var(--space-5);
+}
+
+.modal-notes li {
+  margin: var(--space-1) 0;
+}
+
+.modal-notes code {
+  background: var(--muted);
+  padding: 0.15em 0.4em;
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+}
+
+.modal-notes pre {
+  background: var(--muted);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: var(--space-2) 0;
+}
+
+.modal-notes pre code {
+  background: none;
+  padding: 0;
+}
+
+.modal-notes a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.modal-notes a:hover {
+  opacity: 0.8;
+}
+
+.modal-notes p {
+  margin: var(--space-2) 0;
+}
+
+.modal-notes strong {
+  color: var(--foreground);
+}
+
+/* Card preview text */
+.card-preview {
+  font-size: 0.8rem;
+  color: var(--foreground-muted);
+  line-height: 1.4;
+  margin: var(--space-2) 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

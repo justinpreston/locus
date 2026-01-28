@@ -486,11 +486,17 @@
       ? '<span class="priority-badge high">HIGH</span>' 
       : '';
     
+    // Notes preview (first 100 chars, strip markdown)
+    const notesPreview = item.notes 
+      ? item.notes.replace(/[#*`\[\]]/g, '').substring(0, 100).trim() + (item.notes.length > 100 ? '...' : '')
+      : '';
+    
     card.innerHTML = `
       <div class="card-header">
         <span class="card-title">${escapeHtml(item.title)}</span>
         ${priorityBadge}
       </div>
+      ${notesPreview ? `<div class="card-preview">${escapeHtml(notesPreview)}</div>` : ''}
       <div class="card-meta">
         <span class="room-badge" data-room="${item.room}">${roomIconHtml} ${room.name}</span>
         ${dueHtml}
@@ -558,7 +564,8 @@
       .map(tag => `<span class="tag">${escapeHtml(tag)}</span>`)
       .join('');
     
-    $modal.notes.textContent = item.notes || '';
+    // Render notes as simple markdown
+    $modal.notes.innerHTML = renderSimpleMarkdown(item.notes || '');
     
     // Link to GitHub issue for editing
     $modal.source.innerHTML = item.url 
@@ -600,6 +607,44 @@
     const div = document.createElement('div');
     div.textContent = str;
     return div.innerHTML;
+  }
+
+  function renderSimpleMarkdown(text) {
+    if (!text) return '';
+    
+    // Escape HTML first
+    let html = escapeHtml(text);
+    
+    // Convert markdown to HTML (basic subset)
+    html = html
+      // Headers
+      .replace(/^### (.+)$/gm, '<h4>$1</h4>')
+      .replace(/^## (.+)$/gm, '<h3>$1</h3>')
+      .replace(/^# (.+)$/gm, '<h2>$1</h2>')
+      // Bold
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      // Italic
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      // Code blocks
+      .replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+      // Inline code
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      // Bullet lists
+      .replace(/^- (.+)$/gm, '<li>$1</li>')
+      // Numbered lists
+      .replace(/^\d+\. (.+)$/gm, '<li>$1</li>')
+      // Links
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
+      // Line breaks (double newline = paragraph)
+      .replace(/\n\n/g, '</p><p>')
+      // Single newlines
+      .replace(/\n/g, '<br>');
+    
+    // Wrap consecutive <li> tags in <ul>
+    html = html.replace(/(<li>.*?<\/li>)(\s*<br>)?(\s*<li>)/g, '$1$3');
+    html = html.replace(/(<li>.*?<\/li>)+/g, '<ul>$&</ul>');
+    
+    return `<p>${html}</p>`;
   }
 
   // ========================================
