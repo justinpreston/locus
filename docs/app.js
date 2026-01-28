@@ -490,6 +490,20 @@
       }
     });
     
+    // Drag and drop (only when logged in)
+    if (isLoggedIn()) {
+      card.draggable = true;
+      card.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', item.id);
+        e.dataTransfer.setData('application/json', JSON.stringify({ id: item.id, issueNumber: item.issueNumber, status: item.status }));
+        card.classList.add('dragging');
+      });
+      card.addEventListener('dragend', () => {
+        card.classList.remove('dragging');
+        document.querySelectorAll('.column').forEach(c => c.classList.remove('drag-over'));
+      });
+    }
+    
     return card;
   }
 
@@ -682,26 +696,6 @@
     });
   }
   
-  // Make cards draggable when rendering
-  const originalCreateCard = createCard;
-  createCard = function(item) {
-    const card = originalCreateCard(item);
-    
-    if (isLoggedIn()) {
-      card.draggable = true;
-      card.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', item.id);
-        card.classList.add('dragging');
-      });
-      card.addEventListener('dragend', () => {
-        card.classList.remove('dragging');
-        document.querySelectorAll('.column').forEach(c => c.classList.remove('drag-over'));
-      });
-    }
-    
-    return card;
-  };
-
   init();
 
 })();
