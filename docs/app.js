@@ -477,10 +477,15 @@
     // Room badge with optional custom icon
     const roomIconHtml = await getRoomIconHtml(item.room, 'small');
     
+    // Priority badge (only for high priority)
+    const priorityBadge = item.priority === 'high' 
+      ? '<span class="priority-badge high">HIGH</span>' 
+      : '';
+    
     card.innerHTML = `
       <div class="card-header">
         <span class="card-title">${escapeHtml(item.title)}</span>
-        <span class="card-priority ${item.priority}" title="${item.priority} priority"></span>
+        ${priorityBadge}
       </div>
       <div class="card-meta">
         <span class="room-badge" data-room="${item.room}">${roomIconHtml} ${room.name}</span>
