@@ -3,31 +3,31 @@
     "vault": {
       "name": "The Vault",
       "description": "Trading, finance, and investments",
-      "icon": "🏦",
+      "icon": "\ud83c\udfe6",
       "color": "#D4AF37"
     },
     "hearth": {
       "name": "The Hearth",
       "description": "Family, home, and personal",
-      "icon": "🏠",
+      "icon": "\ud83c\udfe0",
       "color": "#E07A5F"
     },
     "workshop": {
       "name": "The Workshop",
       "description": "Tech projects and tools",
-      "icon": "🔧",
+      "icon": "\ud83d\udd27",
       "color": "#81B29A"
     },
     "garden": {
       "name": "The Garden",
       "description": "Ideas and someday/maybe",
-      "icon": "🌱",
+      "icon": "\ud83c\udf31",
       "color": "#9B72AA"
     },
     "archive": {
       "name": "The Archive",
       "description": "Completed and reference",
-      "icon": "📜",
+      "icon": "\ud83d\udcdc",
       "color": "#6B7280"
     }
   },
@@ -102,7 +102,7 @@
       "priority": "high",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Self-hosted project board with memory palace metaphor. ✅ Complete!",
+      "notes": "Self-hosted project board with memory palace metaphor. \u2705 Complete!",
       "tags": [
         "project",
         "dashboard"
@@ -132,7 +132,7 @@
       "priority": "low",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Clawdbot → Moltbot rebrand. Wait for official migration path before switching.",
+      "notes": "Clawdbot \u2192 Moltbot rebrand. Wait for official migration path before switching.",
       "tags": [
         "migration"
       ],
@@ -256,6 +256,23 @@
         "google"
       ],
       "created": "2026-01-26"
+    },
+    {
+      "id": "vault-005",
+      "title": "Alpaca Paper Trading + ODA Universe Scanner",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "high",
+      "due": null,
+      "source": "memory/2026-02-02.md",
+      "notes": "Connect Alpaca API/MCP. Build 3-tier universe scanner (Tier 1: 50 liquid, Tier 2: ~25 dynamic CES-E \u226570, Tier 3: discipline overlay). Integrate with ODA permission stack. Paper trade to validate options selection logic.",
+      "tags": [
+        "automation",
+        "trading",
+        "oda",
+        "alpaca"
+      ],
+      "created": "2026-02-02"
     }
   ]
 }
