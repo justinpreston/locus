@@ -3,31 +3,31 @@
     "vault": {
       "name": "The Vault",
       "description": "Trading, finance, and investments",
-      "icon": "\ud83c\udfe6",
+      "icon": "🏦",
       "color": "#D4AF37"
     },
     "hearth": {
       "name": "The Hearth",
       "description": "Family, home, and personal",
-      "icon": "\ud83c\udfe0",
+      "icon": "🏠",
       "color": "#E07A5F"
     },
     "workshop": {
       "name": "The Workshop",
       "description": "Tech projects and tools",
-      "icon": "\ud83d\udd27",
+      "icon": "🔧",
       "color": "#81B29A"
     },
     "garden": {
       "name": "The Garden",
       "description": "Ideas and someday/maybe",
-      "icon": "\ud83c\udf31",
+      "icon": "🌱",
       "color": "#9B72AA"
     },
     "archive": {
       "name": "The Archive",
       "description": "Completed and reference",
-      "icon": "\ud83d\udcdc",
+      "icon": "📜",
       "color": "#6B7280"
     }
   },
@@ -102,7 +102,7 @@
       "priority": "high",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Self-hosted project board with memory palace metaphor. \u2705 Complete!",
+      "notes": "Self-hosted project board with memory palace metaphor. ✅ Complete!",
       "tags": [
         "project",
         "dashboard"
@@ -132,7 +132,7 @@
       "priority": "low",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Clawdbot \u2192 Moltbot rebrand. Wait for official migration path before switching.",
+      "notes": "Clawdbot → Moltbot rebrand. Wait for official migration path before switching.",
       "tags": [
         "migration"
       ],
@@ -265,7 +265,7 @@
       "priority": "high",
       "due": null,
       "source": "memory/2026-02-02.md",
-      "notes": "Connect Alpaca API/MCP. Build 3-tier universe scanner (Tier 1: 50 liquid, Tier 2: ~25 dynamic CES-E \u226570, Tier 3: discipline overlay). Integrate with ODA permission stack. Paper trade to validate options selection logic.",
+      "notes": "Connect Alpaca API/MCP. Build 3-tier universe scanner (Tier 1: 50 liquid, Tier 2: ~25 dynamic CES-E ≥70, Tier 3: discipline overlay). Integrate with ODA permission stack. Paper trade to validate options selection logic.",
       "tags": [
         "automation",
         "trading",
@@ -273,6 +273,69 @@
         "alpaca"
       ],
       "created": "2026-02-02"
+    },
+    {
+      "id": "vault-006",
+      "title": "Expand scanner stock universe",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "source": "memory/2026-02-03.md",
+      "notes": "Current universe is ~100 stocks. Expand to 500+ by adding: Russell 2000 high-volume, sector ETFs, IPOs from past 2 years, earnings movers. Goal: more opportunities for RSI reversion bot.",
+      "tags": [
+        "automation",
+        "trading",
+        "scanner"
+      ],
+      "created": "2026-02-03"
+    },
+    {
+      "id": "vault-007",
+      "title": "Weight thesis stocks in scanner",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "source": "memory/2026-02-03.md",
+      "notes": "Combine scanner score with thesis alignment. Thesis stocks (critical minerals, space) get score boost. Keep best of both: high win-rate + conviction plays.",
+      "tags": [
+        "automation",
+        "trading",
+        "scanner"
+      ],
+      "created": "2026-02-03"
+    },
+    {
+      "id": "vault-008",
+      "title": "Multi-strategy tracking for Alpaca bot",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Add virtual portfolio tracking to tag trades by strategy (rsi_reversion, momentum, gap_fill, etc). Track PnL per strategy while using single paper account. Enables A/B testing different approaches.",
+      "tags": [
+        "alpaca",
+        "trading",
+        "bot"
+      ],
+      "created": "2026-02-03"
+    },
+    {
+      "id": "vault-009",
+      "title": "IBKR-trader skill for live trading",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "low",
+      "due": null,
+      "notes": "ClawHub skill: ibkr-trader by FlokieW. Interactive Brokers API integration with automated 2FA/IBeam login. Bookmark for when graduating from Alpaca paper trading to real money. Security audit needed before install.",
+      "tags": [
+        "trading",
+        "ibkr",
+        "skill",
+        "bookmark"
+      ],
+      "created": "2026-02-03"
     }
   ]
 }
