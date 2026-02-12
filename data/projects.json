@@ -3,31 +3,31 @@
     "vault": {
       "name": "The Vault",
       "description": "Trading, finance, and investments",
-      "icon": "🏦",
+      "icon": "\ud83c\udfe6",
       "color": "#D4AF37"
     },
     "hearth": {
       "name": "The Hearth",
       "description": "Family, home, and personal",
-      "icon": "🏠",
+      "icon": "\ud83c\udfe0",
       "color": "#E07A5F"
     },
     "workshop": {
       "name": "The Workshop",
       "description": "Tech projects and tools",
-      "icon": "🔧",
+      "icon": "\ud83d\udd27",
       "color": "#81B29A"
     },
     "garden": {
       "name": "The Garden",
       "description": "Ideas and someday/maybe",
-      "icon": "🌱",
+      "icon": "\ud83c\udf31",
       "color": "#9B72AA"
     },
     "archive": {
       "name": "The Archive",
       "description": "Completed and reference",
-      "icon": "📜",
+      "icon": "\ud83d\udcdc",
       "color": "#6B7280"
     }
   },
@@ -102,7 +102,7 @@
       "priority": "high",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Self-hosted project board with memory palace metaphor. ✅ Complete!",
+      "notes": "Self-hosted project board with memory palace metaphor. \u2705 Complete!",
       "tags": [
         "project",
         "dashboard"
@@ -132,7 +132,7 @@
       "priority": "low",
       "due": null,
       "source": "memory/2025-01-27.md",
-      "notes": "Clawdbot → Moltbot rebrand. Wait for official migration path before switching.",
+      "notes": "Clawdbot \u2192 Moltbot rebrand. Wait for official migration path before switching.",
       "tags": [
         "migration"
       ],
@@ -265,7 +265,7 @@
       "priority": "high",
       "due": null,
       "source": "memory/2026-02-02.md",
-      "notes": "Connect Alpaca API/MCP. Build 3-tier universe scanner (Tier 1: 50 liquid, Tier 2: ~25 dynamic CES-E ≥70, Tier 3: discipline overlay). Integrate with ODA permission stack. Paper trade to validate options selection logic.",
+      "notes": "Connect Alpaca API/MCP. Build 3-tier universe scanner (Tier 1: 50 liquid, Tier 2: ~25 dynamic CES-E \u226570, Tier 3: discipline overlay). Integrate with ODA permission stack. Paper trade to validate options selection logic.",
       "tags": [
         "automation",
         "trading",
@@ -336,6 +336,88 @@
         "bookmark"
       ],
       "created": "2026-02-03"
+    },
+    {
+      "id": "vault-010",
+      "title": "ODA Options Execution Bot",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Alpaca doesn't support options. Need separate execution layer for ODA signals. Candidates: Tradier (best options API), TD/Schwab, IBKR, Tastytrade. Build after ODA paper trading validates (post-Mar 7 decision gate).",
+      "tags": [
+        "trading",
+        "oda",
+        "options",
+        "execution",
+        "inference-capital"
+      ],
+      "created": "2026-02-05"
+    },
+    {
+      "id": "vault-011",
+      "title": "RL Execution Optimizer (Gym + PPO)",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "low",
+      "due": null,
+      "notes": "Use reinforcement learning (PPO via stable-baselines3) to optimize execution decisions \u2014 hold times, exit timing, stop logic \u2014 on top of existing signals (GEX, momentum, RSI). NOT for entry signals. Requires 12+ months validated trade data first. Custom Gym environment with proprietary state space (GEX level, VIX slope, overnight gap %). Target: Q3 2026 earliest. Source: RL Trading Strategy video research (Feb 11, 2026).",
+      "tags": [
+        "trading",
+        "ml",
+        "reinforcement-learning",
+        "execution",
+        "inference-capital"
+      ],
+      "created": "2026-02-11"
+    },
+    {
+      "id": "vault-012",
+      "title": "Compass: Hard-Gate Options Screener (Reddit reference)",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Reddit post: S&P 500 options screener using hard gates (IV, HV, liquidity, earnings) \u2192 scoring with sector concentration penalty \u2192 Claude/GPT parallel explanation \u2192 auto-builds iron condors, credit spreads, straddles. 30-45 DTE. Next.js + Tastytrade + Finnhub. Reference for Compass ODA bot build. URL: https://www.reddit.com/r/ClaudeAI/comments/1r35gpb/",
+      "tags": [
+        "compass",
+        "options",
+        "reference",
+        "ai-trading"
+      ],
+      "created": "2026-02-12"
+    },
+    {
+      "id": "vault-013",
+      "title": "Fractional Differentiation for Feature Pipelines",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "López de Prado AFML technique #5. Differentiate price series by fraction d (e.g. 0.4) instead of integer — preserves ~90% of memory/trend while achieving stationarity. Better ML features than standard returns or raw prices. Module built: src/ml/fracdiff.py (find_min_d, frac_diff_ffd). Integration needed: wire into FeaturePipeline for all strategies, auto-detect optimal d per ticker, replace standard differencing in model inputs.",
+      "tags": [
+        "ml",
+        "features",
+        "afml",
+        "inference-capital"
+      ],
+      "created": "2026-02-12"
+    },
+    {
+      "id": "vault-014",
+      "title": "Confidence-Based Bet Sizing (Meta-Model → Position Size)",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "López de Prado AFML technique #6. Map meta-model probability to position size: b = 2Φ(z[p]) - 1. Replaces fixed $10K sizing with confidence-scaled sizing. Function built in src/ml/meta_labeling.py (bet_size). Integration needed: wire into portfolio allocator so high-conviction trades get larger positions and low-conviction get smaller. Requires working meta-labeler first (Daybreak pipeline accumulating data). Estimated 15-25% improvement in risk-adjusted returns.",
+      "tags": [
+        "ml",
+        "position-sizing",
+        "afml",
+        "inference-capital"
+      ],
+      "created": "2026-02-12"
     }
   ]
 }
