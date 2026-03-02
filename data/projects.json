@@ -394,7 +394,7 @@
       "status": "backlog",
       "priority": "medium",
       "due": null,
-      "notes": "López de Prado AFML technique #5. Differentiate price series by fraction d (e.g. 0.4) instead of integer — preserves ~90% of memory/trend while achieving stationarity. Better ML features than standard returns or raw prices. Module built: src/ml/fracdiff.py (find_min_d, frac_diff_ffd). Integration needed: wire into FeaturePipeline for all strategies, auto-detect optimal d per ticker, replace standard differencing in model inputs.",
+      "notes": "L\u00f3pez de Prado AFML technique #5. Differentiate price series by fraction d (e.g. 0.4) instead of integer \u2014 preserves ~90% of memory/trend while achieving stationarity. Better ML features than standard returns or raw prices. Module built: src/ml/fracdiff.py (find_min_d, frac_diff_ffd). Integration needed: wire into FeaturePipeline for all strategies, auto-detect optimal d per ticker, replace standard differencing in model inputs.",
       "tags": [
         "ml",
         "features",
@@ -405,12 +405,12 @@
     },
     {
       "id": "vault-014",
-      "title": "Confidence-Based Bet Sizing (Meta-Model → Position Size)",
+      "title": "Confidence-Based Bet Sizing (Meta-Model \u2192 Position Size)",
       "room": "vault",
       "status": "backlog",
       "priority": "medium",
       "due": null,
-      "notes": "López de Prado AFML technique #6. Map meta-model probability to position size: b = 2Φ(z[p]) - 1. Replaces fixed $10K sizing with confidence-scaled sizing. Function built in src/ml/meta_labeling.py (bet_size). Integration needed: wire into portfolio allocator so high-conviction trades get larger positions and low-conviction get smaller. Requires working meta-labeler first (Daybreak pipeline accumulating data). Estimated 15-25% improvement in risk-adjusted returns.",
+      "notes": "L\u00f3pez de Prado AFML technique #6. Map meta-model probability to position size: b = 2\u03a6(z[p]) - 1. Replaces fixed $10K sizing with confidence-scaled sizing. Function built in src/ml/meta_labeling.py (bet_size). Integration needed: wire into portfolio allocator so high-conviction trades get larger positions and low-conviction get smaller. Requires working meta-labeler first (Daybreak pipeline accumulating data). Estimated 15-25% improvement in risk-adjusted returns.",
       "tags": [
         "ml",
         "position-sizing",
@@ -418,6 +418,51 @@
         "inference-capital"
       ],
       "created": "2026-02-12"
+    },
+    {
+      "id": "vault-015",
+      "title": "pmxt \u2014 Prediction Market Unified API",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "low",
+      "due": null,
+      "notes": "ccxt-style API for Polymarket/Kalshi/Limitless. Potential use: Fed rate probabilities as Compass regime input. DomeAPI acquired by Polymarket, pmxt is open-source alt. github.com/pmxt-dev/pmxt",
+      "tags": [
+        "prediction-markets",
+        "data-source",
+        "regime-detection"
+      ],
+      "created": "2026-02-21"
+    },
+    {
+      "id": "vault-016",
+      "title": "Confidence-based strategy gating (continuous score vs binary on/off)",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Replace binary VIX threshold gating with continuous confidence score. Regime detection (Hurst/HMM) outputs confidence level \u2192 low confidence = reduce exposure instead of full on/off. Inspired by r/algotrading post matching Forge architecture.",
+      "tags": [
+        "forge",
+        "regime-detection",
+        "risk-gate"
+      ],
+      "created": "2026-02-23"
+    },
+    {
+      "id": "vault-017",
+      "title": "Alpha Engine decommissioned \u2014 replaced by Satori",
+      "room": "archive",
+      "status": "done",
+      "priority": "low",
+      "due": null,
+      "notes": "Stopped/disabled systemd service (crash-looping 3535+ restarts). Removed pycache remnants and logs. Migration to Satori already complete.",
+      "tags": [
+        "inference-capital",
+        "satori",
+        "decommission"
+      ],
+      "created": "2026-03-01"
     }
   ]
 }
