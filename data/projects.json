@@ -463,6 +463,22 @@
         "decommission"
       ],
       "created": "2026-03-01"
+    },
+    {
+      "id": "vault-018",
+      "title": "Volume filter for IC strategies (VSA / Effort vs Result)",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Spec volume-based entry/exit filters from VSA framework: absorption detection (high vol + small candle), no-supply test (low vol pullback), volume divergence as regime signal. Apply to Tides and Pullback first. Source: youtube.com/watch?v=rDd5zNQ4d-Y",
+      "tags": [
+        "ic",
+        "alpha-research",
+        "volume",
+        "filters"
+      ],
+      "created": "2026-03-06"
     }
   ]
 }
