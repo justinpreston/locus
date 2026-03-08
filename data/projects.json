@@ -479,6 +479,23 @@
         "filters"
       ],
       "created": "2026-03-06"
+    },
+    {
+      "id": "vault-019",
+      "title": "IC Composite Conviction Score & Exit Pressure System",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Inspired by AlgoatTV architecture. Build: (1) multi-dimensional conviction score (trend+momentum+vol+volume \u2192 0-100), (2) phase engine for position lifecycle (new run/gaining/cooling/losing grip), (3) dedicated exit pressure module (score drop from peak + structural breaks), (4) drought filter (min N bars between entries). Could be IC-wide module any strategy plugs into. See alpha-research notes 2026-03-08.",
+      "tags": [
+        "ic",
+        "satori",
+        "architecture",
+        "exits",
+        "signal-aggregation"
+      ],
+      "created": "2026-03-08"
     }
   ]
 }
