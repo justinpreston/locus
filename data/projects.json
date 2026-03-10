@@ -496,6 +496,22 @@
         "edgar"
       ],
       "created": "2026-03-08"
+    },
+    {
+      "id": "vault-020",
+      "title": "PR Wire News-Driven Small-Cap Bot",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "low",
+      "due": null,
+      "notes": "News catalyst strategy using direct PR wire feeds (Business Wire, PR Newswire, GlobeNewswire, ACCESSWIRE) to trade small-cap moves. Requires paid wire subscription ($10-50K/mo), NLP filtering for material PRs, and speed infrastructure. Edge is real but different business from current IC large-cap focus. r/algotrading thread: reddit.com/r/algotrading/comments/1rq187e",
+      "tags": [
+        "inference-capital",
+        "research",
+        "news-catalyst",
+        "small-cap"
+      ],
+      "created": "2026-03-10"
     }
   ]
 }
