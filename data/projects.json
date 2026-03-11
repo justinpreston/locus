@@ -527,6 +527,21 @@
         "ai-video"
       ],
       "created": "2026-03-11"
+    },
+    {
+      "id": "vault-22",
+      "title": "Ratcheting Experiment Factory",
+      "room": "vault",
+      "status": "backlog",
+      "priority": "medium",
+      "due": null,
+      "notes": "Auto-generate experiments from data patterns, validate through 3-Gate pipeline, ratchet threshold up on each success. Spec: ~/github/inference-capital/specs/SPEC-ratcheting-experiment-factory.md",
+      "tags": [
+        "inference-capital",
+        "automation",
+        "alpha-research"
+      ],
+      "created": "2026-03-11"
     }
   ]
 }
