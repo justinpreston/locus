@@ -512,6 +512,21 @@
         "small-cap"
       ],
       "created": "2026-03-10"
+    },
+    {
+      "id": "workshop-21",
+      "title": "Faceless YouTube Pipeline",
+      "room": "workshop",
+      "status": "backlog",
+      "priority": "low",
+      "due": null,
+      "notes": "ElevenLabs + MagicHour + ffmpeg. No CapCut needed. ~$2-4/video. Skill at ~/clawd/skills/faceless-youtube/. Needs ELEVENLABS_API_KEY + MAGIC_HOUR_API_KEY.",
+      "tags": [
+        "content",
+        "youtube",
+        "ai-video"
+      ],
+      "created": "2026-03-11"
     }
   ]
 }
